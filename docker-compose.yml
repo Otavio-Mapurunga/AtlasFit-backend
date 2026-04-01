@@ -1,11 +1,11 @@
-version: "3.9"
 services:
   api:
-    build: ./backend
+    build: .
     container_name: treino_api
     ports:
-      - "8000   :8000" 
+      - "8000:8000" 
     volumes:
-      - ./backend:/app
+      - .:/app
+    working_dir: /app
     env_file:
       - .env  
