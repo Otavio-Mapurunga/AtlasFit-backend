@@ -1,10 +1,10 @@
-from fastapi import APIRouter
+﻿from fastapi import APIRouter
 from pydantic import BaseModel
 import json
-
+from fastapi import HTTPException
 from app.services.gemini_service import gerar_treino
 from app.schemas.treino_schemas import AlunoRequest,TreinoResponse
-from app.repositories.exercicios_repository import buscar_exercicios
+from app.repositories.exercicios_repository import buscar_exercicios, salvar_treino
 
 #router vai servir para facilitar a troca de url do site. prefixo /ia serve para deixar a url mais padronizada e limpa quando for utilizado algo de ia
 router = APIRouter(prefix="/ia")
@@ -17,7 +17,7 @@ def testar_ai():
     return {"resposta": resposta}
 #geração de prompt com base nos dados recibos da classe alunorequest
 @router.post("/generate-workout",response_model=TreinoResponse)
-def trieno_gerado(aluno: AlunoRequest):
+def treino_gerado(aluno: AlunoRequest):
     exercicios = buscar_exercicios()
     lista_exercicios="\n".join([f"- {e['name']}" for e in exercicios])
     prompt= f""" 
@@ -34,7 +34,8 @@ def trieno_gerado(aluno: AlunoRequest):
         ]
       }}
     }}
-    Use apenas os exercicios dessa lista:
+    Use APENAS nomes EXATOS da lista abaixo.
+    NÃO modifique, NÃO invente, NÃO traduza.
     {lista_exercicios}
 
     Crie um treino baseado nos dados:
@@ -54,8 +55,10 @@ def trieno_gerado(aluno: AlunoRequest):
     try:
       dados_json=json.loads(resposta)
     except json.JSONDecodeError:
-        return {"Error : I.A retornou um json inválido"}
+       raise HTTPException(status_code=400, detail="A i.a retornou um JSON invalido")
     treino_validado=TreinoResponse(**dados_json)
+    usuario_id="522a1f07-9408-4f3f-b90c-783862846f3e"
+    salvar_treino(usuario_id, treino_validado.dict())
     
     return treino_validado
     
