@@ -14,3 +14,8 @@ def definir_regras(nivel):
         "avancado": {"max_treinos_semana": 6, "range_reps": (6, 10)}
     }
     return regras.get(nivel)
+def carga_sugerida(carga_atual, nivel, fadiga=False):
+    nova = calcular_progressao(carga_atual, nivel)
+    if fadiga:
+        nova *= 0.9
+    return round(nova, 2)
