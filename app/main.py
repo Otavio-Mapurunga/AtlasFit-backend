@@ -1,3 +1,7 @@
+#otavio eu vou dar commit no main.py mas como não sei se posso overwritar o teu, eu vou commitar e deixar tudo comentado
+#blz valeu, tá la embaixo, depois do teu
+
+
 from fastapi import FastAPI
 from app.routes.ia_router import router
 
@@ -8,8 +12,6 @@ app.include_router(router)
 def red_road():
     return {"mensagem": "API funcionando"}
 
-#otavio eu vou dar commit no main.py mas como não sei se posso overwritar o teu, eu vou commitar e deixar tudo comentado
-#blz valeu
 #from fastapi import FastAPI, HTTPException
 #from fastapi.middleware.cors import CORSMiddleware
 #from pydantic import BaseModel
