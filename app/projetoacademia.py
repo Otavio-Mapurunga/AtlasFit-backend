@@ -19,3 +19,4 @@ def carga_sugerida(carga_atual, nivel, fadiga=False):
     if fadiga:
         nova *= 0.9
     return round(nova, 2)
+def validar_treino(nivel, treinos_semana, reps):
