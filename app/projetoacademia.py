@@ -7,3 +7,4 @@ taxas = {
     if nivel not in taxas:
         raise ValueError("Nível inválido")
     return round(carga_atual * (1 + taxas[nivel]), 2)
+def definir_regras(nivel):
