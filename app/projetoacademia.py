@@ -8,3 +8,9 @@ taxas = {
         raise ValueError("Nível inválido")
     return round(carga_atual * (1 + taxas[nivel]), 2)
 def definir_regras(nivel):
+  regras = {
+        "iniciante": {"max_treinos_semana": 3, "range_reps": (10, 15)},
+        "intermediario": {"max_treinos_semana": 5, "range_reps": (8, 12)},
+        "avancado": {"max_treinos_semana": 6, "range_reps": (6, 10)}
+    }
+    return regras.get(nivel)
