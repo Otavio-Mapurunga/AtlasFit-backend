@@ -20,3 +20,12 @@ def carga_sugerida(carga_atual, nivel, fadiga=False):
         nova *= 0.9
     return round(nova, 2)
 def validar_treino(nivel, treinos_semana, reps):
+regras = definir_regras(nivel)
+    if not regras:
+        return "Nível inválido"
+    erros = []
+    if treinos_semana > regras["max_treinos_semana"]:
+        erros.append("Treinos semanais acima do recomendado")
+    if not (regras["range_reps"][0] <= reps <= regras["range_reps"][1]):
+        erros.append("Repetições fora do ideal")
+    return {"valido": len(erros) == 0, "erros": erros}
