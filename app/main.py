@@ -47,6 +47,6 @@ def red_road():
 #    except ValueError as e:
 #        raise HTTPException(status_code=400, detail=str(e))
 
-@app.get("/")
-def root():
-    return {"message": "API de Treino funcionando!"}
+#@app.get("/")
+#def root():
+#    return {"message": "API de Treino funcionando!"}
