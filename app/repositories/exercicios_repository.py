@@ -1,23 +1,39 @@
 from app.config import supabase
 
 def buscar_exercicios():
-    """Busca todos os exercícios cadastrados no Supabase."""
-    response = supabase.table("exercicios").select("name","id","primaryMuscles").execute()
+    response = supabase.table("exercicios").select("name", "id", "primaryMuscles").execute()
     return response.data
-def salvar_treino(id_aluno: str, nome_treino: dict | None = None):
-    response=supabase.table("treinos").insert({
-        "id_aluno":id_aluno,
-        "nome_treino":nome_treino,
-        "objetivo":"gerado automaticamente",
-    }).execute()
-    #sempre usar () para executar um requerimento ou ação, sem isso não funciona
-    return response.data[0]["id"]
 
-def salvar_exercicio_no_treino(id_treino:str,id_exercicio:str,series:int,repeticoes:str):
-    supabase.table("treino_exercicios").insert({
-        "id_treino":id_treino,
-        "id_exercicio":id_exercicio,
-        "series":series,
-        "repeticoes":repeticoes
+def salvar_treino(id_aluno: str, objetivo: str = "gerado automaticamente") -> str:
+    response = supabase.table("treinos").insert({
+        "id_aluno": id_aluno,
+        "nome_treino": "Treino gerado por IA",
+        "objetivo": objetivo,
     }).execute()
-    return 
+
+    if not response.data:
+        raise ValueError("Inserção em 'treinos' não retornou dados.")
+
+    return str(response.data[0]["id_treino"])
+
+
+def salvar_dia_treino(id_treino: str, nome_dia: str, ordem: int) -> str:
+    response = supabase.table("treino_dias").insert({
+        "id_treino": id_treino,
+        "nome_dia": nome_dia,
+        "ordem": ordem,
+    }).execute()
+
+    if not response.data:
+        raise ValueError(f"Inserção em 'treino_dias' não retornou dados para o dia '{nome_dia}'.")
+
+    return str(response.data[0]["id_dia"])
+
+def salvar_exercicio_no_treino(id_dia_treino: str, id_exercicio: str, series: int, repeticoes: str, ordem: int):
+    supabase.table("treino_exercicios").insert({
+        "id_dia_treino": id_dia_treino,
+        "id": id_exercicio,
+        "series": series,
+        "repeticoes": repeticoes,
+        "ordem": ordem,
+    }).execute() 
