@@ -21,6 +21,7 @@ class TreinoCreate(BaseModel):
     treino:Dict[str,List[Exercicio]]
 
 class TreinoInput(BaseModel):
+    carga_atual: float # eu coloquei essa linha depois
     nivel: str
     treinos_semana: int
     reps: int
