@@ -19,3 +19,9 @@ class TreinoResponse(BaseModel):
 class TreinoCreate(BaseModel):
     usuario_id:str
     treino:Dict[str,List[Exercicio]]
+
+class TreinoInput(BaseModel):
+    nivel: str
+    treinos_semana: int
+    reps: int
+    fadiga: bool = False

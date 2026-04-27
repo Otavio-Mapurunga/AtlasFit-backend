@@ -1,7 +1,7 @@
 def calcular_progressao(carga_atual, nivel):
-taxas = {
+    taxas = {
         "iniciante": 0.05,
-"intermediario": 0.025,
+        "intermediario": 0.025,
         "avancado": 0.01
     }
     if nivel not in taxas:

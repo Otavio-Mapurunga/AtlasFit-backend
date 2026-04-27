@@ -2,36 +2,30 @@
 #blz valeu, tá la embaixo, depois do teu
 
 
-from fastapi import FastAPI
+from fastapi import FastAPI,HTTPException
 from app.routes.ia_router import router
+from fastapi.middleware.cors import CORSMiddleware
+from app.routes.ia_router import router as ia_router
+from app.routes.treino_router import router as treino_router
 
 app= FastAPI()
-app.include_router(router)
+
+app.include_router(ia_router)      
+app.include_router(treino_router)
+
+#config cors pro next.js
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000","https://v0-projeto-atlas-fit.vercel.app/"], 
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/")
 def red_road():
     return {"mensagem": "API funcionando"}
 
-#from fastapi import FastAPI, HTTPException
-#from fastapi.middleware.cors import CORSMiddleware
-#from pydantic import BaseModel
-#from projetoacademia import calcular_progressao, carga_sugerida, validar_treino
-
-#app = FastAPI()
-
-#####config cors pro next.js
-#app.add_middleware(
-#    CORSMiddleware,
-#    allow_origins=["http://localhost:3000"],  # URL do seu front-end
-#    allow_methods=["*"],
-#    allow_headers=["*"],
-#)
-
-#class TreinoInput(BaseModel):
-#    nivel: str
-#    treinos_semana: int
-#    reps: int
-#    fadiga: bool = False
 
 #@app.post("/api/treino/calcular")
 #def calcular_treino(data: TreinoInput):
@@ -47,6 +41,3 @@ def red_road():
 #    except ValueError as e:
 #        raise HTTPException(status_code=400, detail=str(e))
 
-#@app.get("/")
-#def root():
-#    return {"message": "API de Treino funcionando!"}

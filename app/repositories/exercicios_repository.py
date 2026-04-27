@@ -14,7 +14,7 @@ def salvar_treino(id_aluno: str, objetivo: str = "gerado automaticamente") -> st
     if not response.data:
         raise ValueError("Inserção em 'treinos' não retornou dados.")
 
-    return str(response.data[0]["id_treino"])
+    return str(response.data[0]["id_treino"])#type:ignore
 
 
 def salvar_dia_treino(id_treino: str, nome_dia: str, ordem: int) -> str:
@@ -27,7 +27,7 @@ def salvar_dia_treino(id_treino: str, nome_dia: str, ordem: int) -> str:
     if not response.data:
         raise ValueError(f"Inserção em 'treino_dias' não retornou dados para o dia '{nome_dia}'.")
 
-    return str(response.data[0]["id_dia"])
+    return str(response.data[0]["id_dia"]) #type:ignore
 
 def salvar_exercicio_no_treino(id_dia_treino: str, id_exercicio: str, series: int, repeticoes: str, ordem: int):
     supabase.table("treino_exercicios").insert({
