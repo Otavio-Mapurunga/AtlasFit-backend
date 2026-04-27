@@ -25,3 +25,8 @@ class TreinoInput(BaseModel):
     treinos_semana: int
     reps: int
     fadiga: bool = False
+
+class ProgressaoResponse(BaseModel):
+    nova_carga: float
+    carga_sugerida: float
+    validacao: dict
