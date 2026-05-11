@@ -5,6 +5,10 @@ from app.repositories import workout_repository
 from app.schemas.treino_schemas import ProgressaoResponse, TreinoInput
 from app.services.progressao_service import calcular_progressao, carga_sugerida, validar_treino
 
+
+router = APIRouter(prefix="/treinos", tags=["Treinos"])
+
+
 @router.post("/calcular", response_model=ProgressaoResponse)
 def calcular_treino(data: TreinoInput):
     try:
@@ -16,9 +20,6 @@ def calcular_treino(data: TreinoInput):
         raise HTTPException(status_code=400, detail=str(e))
 ## aqui já não é mais
 
-
-
-router = APIRouter(prefix="/treinos", tags=["Treinos"])
 
 # id_aluno ainda hardcoded — será substituído pelo JWT do Sam
 ID_ALUNO_TEMP = "522a1f07-9408-4f3f-b90c-783862846f3e"
