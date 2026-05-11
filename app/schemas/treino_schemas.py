@@ -1,0 +1,33 @@
+from pydantic import BaseModel
+from typing import List,Dict
+class AlunoRequest(BaseModel):
+    idade:int
+    peso:float
+    altura:float
+    objetivo:str
+    nivel:str
+    dias_treino:int
+
+class Exercicio(BaseModel):
+    exercicio:str
+    series:int
+    reps:str
+
+class TreinoResponse(BaseModel):
+    treino:Dict[str,List[Exercicio]]
+
+class TreinoCreate(BaseModel):
+    usuario_id:str
+    treino:Dict[str,List[Exercicio]]
+
+class TreinoInput(BaseModel):
+    carga_atual: float # eu coloquei essa linha depois
+    nivel: str
+    treinos_semana: int
+    reps: int
+    fadiga: bool = False
+
+class ProgressaoResponse(BaseModel):
+    nova_carga: float
+    carga_sugerida: float
+    validacao: dict
