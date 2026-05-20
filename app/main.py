@@ -7,11 +7,13 @@ from app.routes.ia_router import router
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.ia_router import router as ia_router
 from app.routes.treino_router import router as treino_router
+from app.routes.execucao_router import router as execucao_router
 
 app= FastAPI()
 
 app.include_router(ia_router)      
 app.include_router(treino_router)
+app.include_router(execucao_router)
 
 #config cors pro next.js
 app.add_middleware(
