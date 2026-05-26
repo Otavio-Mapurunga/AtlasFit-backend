@@ -3,7 +3,9 @@ from app.repositories import workout_repository
 
 ## isso foi eu 
 from app.schemas.treino_schemas import ProgressaoResponse, TreinoInput
-from app.services.progressao_service import calcular_progressao, carga_sugerida, validar_treino
+
+# Isso foi comentado porque deu buxo, pécem. 
+# from app.services.progressao_service import calcular_progressao, carga_sugerida, validar_treino
 
 
 router = APIRouter(prefix="/treinos", tags=["Treinos"])
