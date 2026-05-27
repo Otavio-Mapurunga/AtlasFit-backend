@@ -18,7 +18,7 @@ app.include_router(execucao_router)
 #config cors pro next.js
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000","https://v0-projeto-atlas-fit.vercel.app/"], 
+    allow_origins=["http://localhost:3000","https://v0-projeto-atlas-fit.vercel.app","http://26.186.121.188:3000"], 
     allow_methods=["*"],
     allow_headers=["*"],
 )
