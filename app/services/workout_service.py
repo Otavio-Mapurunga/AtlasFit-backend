@@ -82,9 +82,7 @@ def _resolver_exercicio(nome: str, mapa: dict) -> str:
     mapa_normalizado = {_normalizar(k): v for k, v in mapa.items()}
 
     id_exercicio = mapa_normalizado.get(nome_normalizado)
-    if id_exercicio:
-        print(f"[norm] '{nome}' → encontrado por normalização")
-        return id_exercicio
+    if id_exercicio: return id_exercicio
 
     # 3. fuzzy com score mais alto e base normalizada
     resultado = process.extractOne(
@@ -96,9 +94,7 @@ def _resolver_exercicio(nome: str, mapa: dict) -> str:
 
     if resultado:
         nome_encontrado = resultado[0]
-        id_exercicio = mapa_normalizado[nome_encontrado]
-        print(f"[fuzzy] '{nome}' → '{nome_encontrado}' (score: {resultado[1]:.0f})")
-        return id_exercicio
+        return mapa_normalizado[nome_encontrado]
 
     # 4. não encontrou nada confiável
     raise HTTPException(

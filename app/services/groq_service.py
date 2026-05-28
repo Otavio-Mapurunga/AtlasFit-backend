@@ -22,7 +22,7 @@ def gerar_treino(prompt: str) -> str:
     for attempt in range(1, MAX_RETRIES + 1):
         try:
             response = groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model="llama-3.3-70b-versatile",  # Verifique o nome exato do modelo Groq que você está usando
                 messages=[{"role": "user", "content": prompt}],
                 max_tokens=8000,
                 temperature=0.7,
