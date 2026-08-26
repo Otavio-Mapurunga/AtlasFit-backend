@@ -11,8 +11,7 @@ load_dotenv(dotenv_path=env_path)
 GROQ_API=os.getenv("GROQ_API_KEY")
 SUPABASE_URL=os.getenv("SUPABASE_URL")
 SUPABASE_KEY=os.getenv("SUPABASE_KEY")
-VITE_NEON_DATA_API=os.getenv("VITE_NEON_DATA_API")
-VITE_NEON_AUTH_URL=os.getenv("VITE_NEON_AUTH_URL")
+DATABASE_URL=os.getenv("DATABASE_URL")
 
 
 # JWT secret: use provided env or generate a secure default (>=32 bytes)
