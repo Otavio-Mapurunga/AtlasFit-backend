@@ -1,39 +1,45 @@
-from app.config import supabase
+from sqlalchemy import text
+from app.database import engine, insert_one
+
 
 def buscar_exercicios():
-    response = supabase.table("exercicios").select("name", "id", "primaryMuscles").execute()
-    return response.data
+    query = text('SELECT name, id, "primaryMuscles" FROM exercicios')
+    with engine.connect() as conn:
+        result = conn.execute(query)
+        return [dict(r) for r in result.mappings().all()]
+
 
 def salvar_treino(id_aluno: str, objetivo: str = "gerado automaticamente") -> str:
-    response = supabase.table("treinos").insert({
+    row = insert_one("treinos", {
         "id_aluno": id_aluno,
         "nome_treino": "Treino gerado por IA",
         "objetivo": objetivo,
-    }).execute()
-    
-    if not response.data or not response.data[0] or "id_treino" not in response.data[0]:
+    }, returning="id_treino")
+
+    if not row:
         raise ValueError("Inserção em 'treinos' não retornou dados.")
-    
-    return str(response.data[0]["id_treino"])
+
+    return str(row["id_treino"])
 
 
 def salvar_dia_treino(id_treino: str, nome_dia: str, ordem: int) -> str:
-    response = supabase.table("treino_dias").insert({
+    row = insert_one("treino_dias", {
         "id_treino": id_treino,
         "nome_dia": nome_dia,
         "ordem": ordem,
-    }).execute()
-    
-    if not response.data or not response.data[0] or "id_dia" not in response.data[0]:
+    }, returning="id_dia")
+
+    if not row:
         raise ValueError(f"Inserção em 'treino_dias' não retornou dados para o dia '{nome_dia}'.")
-    
-    return str(response.data[0]["id_dia"])
+
+    return str(row["id_dia"])
+
 
 def salvar_exercicio_no_treino(id_dia_treino: str, id_exercicio: str, series: int, repeticoes: str, ordem: int):
-    supabase.table("treino_exercicios").insert({
+    insert_one("treino_exercicios", {
         "id_dia_treino": id_dia_treino,
         "id": id_exercicio,
         "series": series,
         "repeticoes": repeticoes,
         "ordem": ordem,
-    }).execute() 
+    })
