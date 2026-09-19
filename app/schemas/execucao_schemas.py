@@ -9,7 +9,6 @@ class ExecucaoExercicioInput(BaseModel):
 
 class ExecucaoCreate(BaseModel):
     id_treino: str
-    id_aluno: str  # temporário até Sam integrar o JWT
     duracao: Optional[int] = None
     exercicios: List[ExecucaoExercicioInput]
 

@@ -1,6 +1,9 @@
 import json
 from rapidfuzz import process, fuzz
 from fastapi import HTTPException
+from app.repositories.anamnese_repository import buscar_anamnese_mais_recente
+from app.schemas.treino_schemas import AlunoRequest, TreinoResponse
+import unicodedata
 
 from app.services.groq_service import (
     gerar_treino,
@@ -15,7 +18,28 @@ from app.repositories.exercicios_repository import (
 )
 from app.schemas.treino_schemas import AlunoRequest, TreinoResponse
 
-import unicodedata
+
+def _anamnese_para_aluno_request(anamnese: dict) -> AlunoRequest:
+    if not anamnese.get("dias_treino"):
+        raise HTTPException(
+            status_code=400,
+            detail="Sua anamnese não tem 'dias_treino' definido. Atualize sua anamnese antes de gerar um treino."
+        )
+
+    objetivo = anamnese["objetivo"]
+    if isinstance(objetivo, list):
+        objetivo = ", ".join(objetivo)
+
+    return AlunoRequest(
+        idade=anamnese["idade"],
+        peso=anamnese["peso"],
+        altura=anamnese["altura"],
+        objetivo=objetivo,
+        nivel=anamnese["experiencia"],
+        dias_treino=anamnese["dias_treino"],
+    )
+
+
 
 def _normalizar(texto: str) -> str:
     """Remove acentos e coloca em minúsculo para comparação."""
@@ -140,12 +164,19 @@ def _salvar_treino_completo(id_aluno: str, treino: TreinoResponse, mapa: dict) -
                 ) from exc
 
 
-def gerar_e_salvar_treino(aluno: AlunoRequest, id_aluno: str) -> TreinoResponse:
+def gerar_e_salvar_treino(id_aluno: str) -> TreinoResponse:
+    anamnese = buscar_anamnese_mais_recente(id_aluno)
+    if not anamnese:
+        raise HTTPException(
+            status_code=400,
+            detail="Nenhuma anamnese encontrada. Preencha sua anamnese antes de gerar um treino."
+        )
+
+    aluno = _anamnese_para_aluno_request(anamnese)
 
     exercicios = buscar_exercicios()
     mapa_exercicio = {e["name"]: e["id"] for e in exercicios}  # type: ignore
 
-    # 2. monta prompt e chama IA
     prompt = _montar_prompt(aluno)
 
     try:
@@ -156,7 +187,6 @@ def gerar_e_salvar_treino(aluno: AlunoRequest, id_aluno: str) -> TreinoResponse:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
 
     treino_validado = _parse_resposta_ia(resposta_bruta)
-
     _salvar_treino_completo(id_aluno, treino_validado, mapa_exercicio)
 
     return treino_validado
