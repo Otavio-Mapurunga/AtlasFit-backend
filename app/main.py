@@ -5,6 +5,7 @@ from app.routers.routes.ia_router import router as ia_router
 from app.routers.routes.treino_router import router as treino_router
 from app.routers.routes.execucao_router import router as execucao_router
 from app.auth.routes import router as auth_router
+from app.routers.routes.anamnese_router import router as anamnese_router
 
 app = FastAPI()
 
@@ -12,6 +13,7 @@ app.include_router(ia_router)
 app.include_router(treino_router)
 app.include_router(execucao_router)
 app.include_router(auth_router)
+app.include_router(anamnese_router)
 
 # config cors pro next.js
 app.add_middleware(
