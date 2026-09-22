@@ -27,16 +27,32 @@ class LoginRequest(BaseModel):
     senha: str
 
 
+class AlunoOut(BaseModel):
+    id_aluno: str
+    nome: str
+    email: str
+
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     expires_in: int
+    aluno: AlunoOut
 
 
-def _gerar_token_response(id_aluno: str) -> dict:
+def _gerar_token_response(aluno: dict) -> dict:
     expires = timedelta(minutes=JWT_EXPIRES_MINUTES)
-    token = create_access_token(data={"sub": str(id_aluno)}, expires_delta=expires)
-    return {"access_token": token, "token_type": "bearer", "expires_in": JWT_EXPIRES_MINUTES * 60}
+    token = create_access_token(data={"sub": str(aluno["id_aluno"])}, expires_delta=expires)
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "expires_in": JWT_EXPIRES_MINUTES * 60,
+        "aluno": {
+            "id_aluno": str(aluno["id_aluno"]),
+            "nome": aluno["nome"],
+            "email": aluno["email"],
+        },
+    }
 
 
 @router.post("/register", response_model=TokenResponse)
@@ -51,7 +67,7 @@ def register(data: RegisterRequest):
             raise HTTPException(status_code=400, detail="Esse email já está cadastrado.")
         raise HTTPException(status_code=500, detail="Erro ao criar conta. Tente novamente.")
 
-    return _gerar_token_response(aluno["id_aluno"])
+    return _gerar_token_response(aluno)
 
 
 @router.post("/login", response_model=TokenResponse)
@@ -61,7 +77,7 @@ def login(data: LoginRequest):
     if not aluno or not verificar_senha(data.senha, aluno["senha_hash"]):
         raise HTTPException(status_code=401, detail="Email ou senha inválidos.")
 
-    return _gerar_token_response(aluno["id_aluno"])
+    return _gerar_token_response(aluno)
 
 
 @router.get("/status")
