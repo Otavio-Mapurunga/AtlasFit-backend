@@ -24,7 +24,7 @@ def buscar_treinos_do_aluno(id_aluno: str) -> list:
                 COALESCE(
                     json_agg(
                         json_build_object(
-                            'id', te.id, 'series', te.series, 'repeticoes', te.repeticoes, 'ordem', te.ordem,
+                            'id_treino_exercicio', te.id_treino_exercicio, 'id', te.id, 'series', te.series, 'repeticoes', te.repeticoes, 'ordem', te.ordem,
                             'exercicios', json_build_object('name', ex.name, 'primaryMuscles', ex."primaryMuscles")
                         ) ORDER BY te.ordem
                     ) FILTER (WHERE te.id IS NOT NULL), '[]'
@@ -64,7 +64,7 @@ def buscar_treino_por_id(id_treino: str, id_aluno: str) -> dict | None:
                 COALESCE(
                     json_agg(
                         json_build_object(
-                            'id', te.id, 'series', te.series, 'repeticoes', te.repeticoes, 'ordem', te.ordem,
+                            'id_treino_exercicio', te.id_treino_exercicio, 'id', te.id, 'series', te.series, 'repeticoes', te.repeticoes, 'ordem', te.ordem,
                             'exercicios', json_build_object('name', ex.name, 'primaryMuscles', ex."primaryMuscles")
                         ) ORDER BY te.ordem
                     ) FILTER (WHERE te.id IS NOT NULL), '[]'
